@@ -1,0 +1,67 @@
+<div class="main bg-secondary">
+    <div class="container">
+        <div class="row justify-content-center text-left">
+            <div class="col-4 mt-5 p-0">
+                <div class="col-12">
+                    <img class="img-card img-thumbnail img-pel rounded mx-auto d-block" [src]="img">
+                </div>
+            </div>
+            <div class="col-4  mt-5">
+                <div class="tittle">
+                    <b class="h2 text-light">{{tittle}}</b>
+                </div>
+                <div class="descriptions text-light mt-4">
+                    <p><b>Genero: <a href="#">{{gender}}</a></b></p>
+                    <p><b>Puntuación: <a href="#">{{starts}}</a></b></p>
+                    <p><b>Año: <a href="#">{{year}}</a></b></p>
+                    <p><b>Directores: <a href="#">Jose Humita</a></b></p>
+                    <p><b>Actores: <a href="#">Alvarez</a></b></p>
+                    <p><b>Tiempo: 1hr 35min</b></p>
+                    <p><b>Calidad: <span class="badge badge-warning">HD</span></b></p>
+                    <button class="btn btn-success"><i class="fa fa-film"></i> Ver Trailer</button>
+                </div>
+            </div>
+            <div class="col-4 mt-5 card-group">
+                <div class="col-12">
+                    <b class="h5 text-light">Peliculas Recomendadas</b>
+                </div>
+                <div class="col-4 recommendations" *ngFor="let film of films">
+                    <div class="card">
+                        <img class="img-card img-thumbnail img-pel rounded mx-auto d-block" [src]="film.img">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mt-4">
+                La próxima entrega de la franquicia y la conclusión de la secuela de la trilogía "Star Wars", así como la "Saga Skywalker"..Un año después de los eventos de "Los últimos Jedi", los restos de la Resistencia se enfrentarán una vez más a la Primera Orden, involucrando conflictos del pasado y del presente. Mientras tanto, el antiguo conflicto entre los Jedi y los Sith llegará a su clímax, lo que llevará a la saga de los Skywalker a un final definitivo. Final de la trilogía iniciada con "El despertar de la Fuerza"....Star Wars: El ascenso de Skywalker
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5">
+            <div class="video">
+                <video controls (click)="toggleVideo()" #videoPlayer>
+                    <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4" />
+                    Browser not supported
+                </video>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-10 mt-5">
+                <p><b class="h3">Comentarios</b></p>
+                <form action="">
+                    <div class="card col-9">
+                        <div class="card-body">
+                            Comentarios...
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <input class="form-control col-9 mr-2" type="text" name="" placeholder="Añadir comentario..">
+                        <button class="btn btn-primary col-2" type="submit">Enviar</button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
