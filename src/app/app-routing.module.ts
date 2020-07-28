@@ -6,6 +6,7 @@ import { DetailComponent } from '../app/detail/detail.component';
 import { FacebookModule } from 'ngx-facebook';
 
 const routes: Routes = [
+  { path: 'home/:type', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'help', component: HelpComponent },
   { path: 'detail/:tittle', component: DetailComponent },

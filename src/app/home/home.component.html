@@ -1,34 +1,35 @@
 <style>
-    .card{
+    .card, .img-thumbnail{
         border: none !important;
     }
 
     .card img:hover {
-        background-color: red;
+        opacity: 0.5;
     }
 
     .bt-search:hover {
         background-color: red !important;
     }
 
-    .img-card:hover {
-        background-color: red !important;
-        border: 2px solid red !important;
+    .description:hover .img-card{
         opacity: 0.5;
     }
-
-    .img-card:hover ~ .description,
+    /*.img-card:hover ~ .description,*/
     .description:hover {
         opacity: 1;
     }
-    
+
     .description {
-        color: red;
-        left: 30%;
+        background-color: rgb(182, 180, 180);
+        border: 0.25rem solid red !important;
+        left: 0;
+        width: 100%;
+        height: 60%;
         opacity: 0;
         position: absolute;
-        top: 10%;
+        top: 0;
         z-index: 2;
+        text-align: center;
         -webkit-transition: all 300ms;
         -moz-transition: all 300ms;
         transition: all 300ms;
@@ -41,106 +42,82 @@
         margin: 0;
     }
 
-    .description .fa-star {
-        position: relative;
-        left: 30% !important;
-    }
-
-    .tittle-film {
+    .tittle-film, .gender-film {
         text-decoration: none;
     }
 
-    .btn-detail {
-        position: relative;
-        left: -10%;
+    .description .fa-star {
+        margin-top: 1em;
+        margin-bottom: 1em;
+        color: yellow;
+    }
+
+    .description .btn-detail {
         margin-top: 1em;
     }
+
 </style>
 <div class="main bg-secondary">
-    <div class="container">
-        <form>
-            <div class="form-row justify-content-center">
-                <div class="col-md-5 mb-3 mt-4">
-                    <input type="text" class="form-control" id="validationCustom03" required placeholder="Buscar pelicula..">
-                </div>
-                <div class="col-md-1 mt-4">
-                    <button class="btn btn-outline-danger text-light my-2 my-sm-0 bt-search" type="submit">Buscar</button>
-                </div> 
+   <div class="container">
+        <div class="form-row justify-content-center">
+            <div class="col-md-5 mb-3 mt-4">
+                <input (keyup)="tittleFilter($event.target.value)" type="text" class="form-control" id="validationCustom03" required placeholder="Buscar pelicula..">
             </div>
-            <div class="form-row">
-                <div class="col-md-4">
-                    <label class="text-dark" for="gender">Genero</label>
-                    <select class="form-control badge-light" id="gender">
-                        <option class="badge-light" *ngFor="let gender of genders">
-                            {{gender}}
-                        </option>
-                    </select>
-                </div>
-     
-                <div class="col-md-4">
-                    <label for="year">Año</label>
-                    <select class="form-control badge-light" id="year">
-                        <option class="badge-light" *ngFor="let year of years">
-                            {{year}}
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label for="otherOptions">Otras Opciones</label>
-                    <select class="form-control badge-light" id="otherOptions">
-                        <option class="badge-light" *ngFor="let otherOption of otherOptions">
-                            {{otherOption}}
-                        </option>
-                    </select>
-                </div>
+            <div class="col-md-1 mt-4">
+                <button class="btn btn-outline-danger text-light my-2 my-sm-0 bt-search">Buscar</button>
+            </div> 
+        </div>
+        <div class="form-row">
+            <div class="col-md-4">
+                <label class="text-dark" for="gender">Genero</label>
+                <select class="form-control badge-light" id="gender" (change)="genderFilter($event.target.value)">
+                    <option class="badge-light" *ngFor="let gender of genders">
+                        {{gender}}
+                    </option>
+                </select>
             </div>
-        </form>
-    
-        <div class="row justify-content-center mt-5">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link bg-dark text-light" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                    </li>
-                    <li class="page-item" *ngFor="let item of items">
-                        <a class="page-link bg-dark text-light" href="#">{{item}}</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link bg-dark text-light" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <div class="col-md-4">
+                <label for="year">Año</label>
+                <select class="form-control badge-light" id="year" (change)="yearFilter($event.target.value)">
+                    <option class="badge-light" *ngFor="let year of years">
+                        {{year}}
+                    </option>
+                </select>
+            </div>  
+            <div class="col-md-4">
+                <label for="otherOptions">Otras Opciones</label>
+                <select class="form-control badge-light" id="otherOptions" (change)="otherOpcionFilter($event.target.value)">
+                    <option class="badge-light" *ngFor="let otherOption of otherOptions">
+                        {{otherOption}}
+                    </option>
+                </select>
+            </div>
         </div>
     
+        <div class="row justify-content-center mt-5">
+            <jw-pagination [items]="items" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>
+        </div>
+
         <hr class="mb-4 bg-light">
         <div class="row card-group">
-            <div class="col-2 ml-4 p-0" *ngFor="let film of films">
+            <div class="col-2 ml-4 p-0" *ngFor="let item of pageOfItems|search:typefilterargs: filterargs">
                 <div class="card">
                     <figure class="rounded">
-                        <img class="img-card img-thumbnail img-pel rounded mx-auto d-block" [src]="film.img">
+                        <img class="img-card img-thumbnail img-pel rounded mx-auto d-block" [src]="item.url_img">
                         <figcaption class="description">
                             <span><b><i class="fa fa-star h4"></i></b></span>
-                            <p class="card-title text-light h4"><b>{{film.starts}}/10</b></p>
-                            <p class="card-title text-light h4 mt-4"><b>{{film.gender}}</b></p>
-                            <button class="btn btn-success btn-detail">Ver Detalle</button>
+                            <p class="card-title text-light h4 qualification"><b>{{item.qualification}}/10</b></p>
+                            <p class="card-title text-light h4 mt-4"><b>{{item.gender}}</b></p>
+                            <button class="btn btn-success btn-detail" (click)="sendFilm(item)">Ver Detalle</button>
                         </figcaption>
                     </figure>
                     <div class="card-body bg-secondary">
-                        <a [routerLink]="[ '/detail',film.name]" class="card-title text-light tittle-film" ><b>{{film.name}}</b></a>
-                        <p class="card-text text-light">{{film.gender}}</p>
-                        <a href="#" class="card-text h5"><span class="badge badge-dark text-light">{{film.year}}</span></a>
+                        <a [routerLink]="" (click)="sendFilm(item)" class="card-title text-light tittle-film" ><b>{{item.tittle}}</b></a>
+                        <p><a [routerLink]="" (click)="genderFilter(item.gender)" class="card-text text-light gender-film">{{item.gender}}</a></p>
+                        <a [routerLink]="" (click)="yearFilter(item.year)" class="card-text h5"><span class="badge badge-dark text-light">{{item.year}}</span></a>
                         <p class="mt-2">
-                            <a href="#" class="card-text h5" *ngIf="film.movie">
+                            <a [routerLink]="" (click)="movieFilter()" class="card-text h5">
                                 <span class="badge badge-success text-light">Pelicula</span>
-                            </a>
-                            <a href="#" class="card-text h5" *ngIf="!film.movie">
-                                <span class="badge badge-primary text-light">Serie</span>
                             </a>
                         </p>
                     </div>
@@ -150,25 +127,7 @@
         <hr class="bg-light">
         
         <div class="row justify-content-center mt-5">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link bg-dark text-light" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                    </li>
-                    <li class="page-item" *ngFor="let item of items">
-                        <a class="page-link bg-dark text-light" href="#">{{item}}</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link bg-dark text-light" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <jw-pagination [items]="items" [pageSize]="20" (changePage)="onChangePage($event)"></jw-pagination>
         </div>
     </div>
 </div>

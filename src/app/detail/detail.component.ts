@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { FacebookService, InitParams, UIResponse, UIParams, FBVideoComponent } from 'ngx-facebook';
+import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/internal/operators';
+import { DataMovieService } from '../services/data-movie.service';
 
 @Component({
   selector: 'app-detail',
@@ -15,15 +17,6 @@ export class DetailComponent implements OnInit {
   toggleVideo(event: any) {
     this.videoplayer.nativeElement.play();
   }
-
-  @ViewChild (FBVideoComponent, { static: false }) video: FBVideoComponent;
-
-  ngAfterViewInit() {
-    this.video.play();
-    this.video.pause();
-    this.video.getVolume();
-  }
-
   onVideoPaused(ev: any) {
     console.log('User paused the video');
   }
@@ -35,27 +28,14 @@ export class DetailComponent implements OnInit {
   public gender;
   public year;
   public films;
+  private state$: Observable<object>;
   
   constructor(
     public route: ActivatedRoute,
-    private fb: FacebookService
+    public router: Router,
+    public dataMovie: DataMovieService
   ) { 
-    
-
-    let params: UIParams = {
-      href: 'https://github.com/zyra/ngx-facebook',
-      method: 'share'
-    };
-   
-    this.fb.ui(params)
-      .then((res: UIResponse) => console.log(res))
-      .catch((e: any) => console.error(e));
-      
-    this.img = "./assets/img/fast2.jpg";
-    this.starts= "6.9";
-    this.gender = "Acción";
-    this.year= "2020";
-
+    this.tittle = dataMovie.film.tittle;
     this.films = [
       { 
         img: "./assets/img/fast2.jpg",
@@ -103,9 +83,7 @@ export class DetailComponent implements OnInit {
   }
 
   ngOnInit() {
-      let a = this.route.params.subscribe(params => {
-        this.tittle = params['tittle'];
-      });
-   }
-
+    window.scrollTo(0, 0);
+  }
+   
 }

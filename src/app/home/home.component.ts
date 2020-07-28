@@ -1,97 +1,65 @@
 import { Component, OnInit } from '@angular/core';
+import { MovieService } from '../services/movie.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { DataMovieService } from '../services/data-movie.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+
 export class HomeComponent implements OnInit {
   
-  public genders;
-  public years;
-  public otherOptions;
-  public films;
-  public items;
+  genders;
+  years;
+  otherOptions;
+  films:any= [];
+  items = [];
+  pageOfItems: Array<any>;
+  typefilterargs = '';
+  filterargs = '';
+  tittle= '';
 
-  constructor() { 
-    
+  constructor( 
+    private movieService: MovieService,
+    public router: Router,
+    private dataMovie: DataMovieService,
+    private route: ActivatedRoute
+  ) {
+    if (this.route.snapshot.params.type !== undefined) {
+      this.typefilterargs = this.route.snapshot.params.type;
+      this.filterargs = this.route.snapshot.params.type;
+    }
   }
 
   ngOnInit() {
+    this.movieService.getAllMovies().subscribe((data)=>{
+      this.items = data;
+    });
 
-    this.films = [
-      { 
-        img: "./assets/img/fast2.jpg",
-        starts: "6.9",
-        name: "Rapido y Furioso 9",
-        gender: "Acción",
-        year: "2020",
-        movie: true
-      },
-      { 
-        img: "./assets/img/fast2.jpg",
-        starts: "6.9",
-        name: "Rapido y Furioso 9",
-        gender: "Acción",
-        year: "2020",
-        movie: false
-      },
-      { 
-        img: "./assets/img/fast2.jpg",
-        starts: "6.9",
-        name: "Rapido y Furioso 9",
-        gender: "Acción",
-        year: "2020",
-        movie: true
-      },
-      { 
-        img: "./assets/img/fast2.jpg",
-        starts: "6.9",
-        name: "Rapido y Furioso 9",
-        gender: "Acción",
-        year: "2020",
-        movie: true
-      },
-      { 
-        img: "./assets/img/fast2.jpg",
-        starts: "6.9",
-        name: "Rapido y Furioso 9",
-        gender: "Acción",
-        year: "2020",
-        movie: true
-      },
-      { 
-        img: "./assets/img/fast2.jpg",
-        starts: "6.9",
-        name: "Rapido y Furioso 9",
-        gender: "Acción",
-        year: "2020",
-        movie: false
-      },
-      { 
-        img: "./assets/img/fast2.jpg",
-        starts: "6.9",
-        name: "Rapido y Furioso 9",
-        gender: "Acción",
-        year: "2020",
-        movie: true
-      },
-      { 
-        img: "./assets/img/fast2.jpg",
-        starts: "6.9",
-        name: "Rapido y Furioso 9",
-        gender: "Acción",
-        year: "2020",
-        movie: true
-      },
+    this.genders = [
+      "Todos",
+      "Acción",
+      "Animación",
+      "Aventura",
+      "Bélica",
+      "Ciencia ficción",
+      "Comedia",
+      "Crimen",
+      "Documental",
+      "Drama",
+      "Familia",
+      "Fantasía",
+      "Historia",
+      "Misterio",
+      "Música",
+      "Película de TV",
+      "Romance",
+      "Suspense",
+      "Terror",
+      "Western"
     ];
-
-    this.items = [];
-    let sizeItems = Math.round(this.films.length/25) + 1;
-
-    for(var x=1; x<=sizeItems;x++) {
-      this.items.push(x);
-    } 
 
     this.genders = [
       "Todos",
@@ -169,4 +137,58 @@ export class HomeComponent implements OnInit {
     ];
   }
 
+  onChangePage(pageOfItems: Array<any>) {
+      this.pageOfItems = pageOfItems;
+  }
+
+  sendFilm(data) {
+    this.dataMovie.film.id = data.id;
+    this.dataMovie.film.tittle= data.tittle;
+    this.dataMovie.film.gender= data.gender;
+    this.dataMovie.film.actor= data.actor;
+    this.dataMovie.film.director= data.director;
+    this.dataMovie.film.qualification= data.qualification;
+    this.dataMovie.film.url_img= data.url_img;
+    this.dataMovie.film.url_trailer= data.url_trailer;
+    this.dataMovie.film.url_video= data.url_video;
+    this.dataMovie.film.quality= data.quality;
+    this.dataMovie.film.duration= data.duration;
+    this.dataMovie.film.year= data.year;
+    this.dataMovie.film.comments= data.comments;
+    this.dataMovie.film.created_at= data.created_at;
+    this.dataMovie.film.updated_at= data.updated_at;
+
+    this.router.navigate(['/detail',this.dataMovie.film.tittle]);
+  }
+
+  yearFilter(value) {
+    this.typefilterargs = 'year';
+    this.filterargs = value;
+  }
+
+  genderFilter(value) {
+    this.typefilterargs = 'gender';
+    this.filterargs = value;
+  }
+
+  otherOpcionFilter(value) {
+    this.typefilterargs = value;
+    this.filterargs = value;
+  }
+
+  tittleFilter(value) {
+    console.log(value);
+    this.typefilterargs = 'tittle';
+    this.filterargs = value;
+  }
+
+  movieFilter() {
+    this.typefilterargs = 'peliculas';
+    this.filterargs = 'peliculas';
+  }
+
+  serieFilter() {
+    this.typefilterargs = 'series';
+    this.filterargs = 'series';
+  }
 }

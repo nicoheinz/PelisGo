@@ -1,40 +1,127 @@
+<style>
+    .modal-dialog {
+      width: 100vw;
+      margin: 8em auto;
+    }
+
+    .modal-body {
+        position:relative;
+        padding:0px;
+    }
+
+    .modal-content {
+        border: 7px solid red !important;
+        border-radius: 10px;
+        width: 60vw;
+        left: -15vw !important;
+    }
+
+    .close {
+        position:absolute;
+        right:-30px;
+        top:-40px;
+        z-index:999;
+        font-size:2rem;
+        font-weight: normal;
+        color:#fff;
+        opacity:1;
+        border-radius: 10px;
+    }
+    
+    .card, .img-thumbnail{
+        border: none !important;
+    }
+
+    .img-card:hover {
+        background-color: red !important;
+    }
+
+    /*Comentarios**/
+    
+    .comment-user figure, .comment-user figure img {
+        width: 60px;
+        height: 60px;
+        position: relative;
+        border-radius: 60px;
+    }
+
+    figure img {
+        top: 90px;
+        left: 20px;
+    }
+
+    .comment-user figcaption {
+        position: absolute;
+        left: 20px;
+        top: 155px;
+        font-size: .65rem;
+        font-weight: 700;
+        color: #fff;
+        text-transform: uppercase;
+        vertical-align: middle;
+        background-color: #007AFF;
+        padding: 0 .5rem;
+        border-radius: 1rem;
+        line-height: 1.25rem;
+        min-width: 60px;
+        text-align: center;
+    }
+
+    .comment-bot {
+        background-color: #141A32;
+        text-align: right;
+    }
+    
+    #text-comment {
+        background-color: #1E2747;
+        border-radius: 3px 3px 0 0;
+        color: #8DA0BC;
+        border: 0;
+        height: 110px;
+        min-height: 110px;
+        max-height: 250px;
+        padding: 2.5em 2em 2.5em 6em;
+    }
+    
+    #btn-send-comment {
+        height: 3em;
+        width: 7em;
+    }
+    
+    /**Reproductor**/
+    .video video{
+        width: 90vw;
+    }
+
+</style>
+
 <div class="main bg-secondary">
     <div class="container">
         <div class="row justify-content-center text-left">
-            <div class="col-4 mt-5 p-0">
+            <div class="col-3 mt-5 p-0">
                 <div class="col-12">
-                    <img class="img-card img-thumbnail img-pel rounded mx-auto d-block" [src]="img">
+                    <img class="img-card img-thumbnail mx-auto d-block" [src]="dataMovie.film.url_img">
                 </div>
             </div>
-            <div class="col-4  mt-5">
+            <div class="col-4 mt-5">
                 <div class="tittle">
                     <b class="h2 text-light">{{tittle}}</b>
                 </div>
                 <div class="descriptions text-light mt-4">
-                    <p><b>Genero: <a href="#">{{gender}}</a></b></p>
-                    <p><b>Puntuación: <a href="#">{{starts}}</a></b></p>
-                    <p><b>Año: <a href="#">{{year}}</a></b></p>
-                    <p><b>Directores: <a href="#">Jose Humita</a></b></p>
-                    <p><b>Actores: <a href="#">Alvarez</a></b></p>
-                    <p><b>Tiempo: 1hr 35min</b></p>
-                    <p><b>Calidad: <span class="badge badge-warning">HD</span></b></p>
-                    <button class="btn btn-success"><i class="fa fa-film"></i> Ver Trailer</button>
+                    <p><b>Genero: <a href="#">{{dataMovie.film.gender}}</a></b></p>
+                    <p><b>Puntuación: <a href="#">{{dataMovie.film.qualification}}</a></b></p>
+                    <p><b>Año: <a href="#">{{dataMovie.film.year}}</a></b></p>
+                    <p><b>Directores: <a href="#">{{dataMovie.film.director}}</a></b></p>
+                    <p><b>Actores: <a href="#">{{dataMovie.film.actor}}</a></b></p>
+                    <p><b>Tiempo: {{dataMovie.film.duration}}</b></p>
+                    <p><b>Calidad: <span class="badge badge-warning">{{dataMovie.film.quality}}</span></b></p>
+                    <button class="btn btn-success" data-toggle="modal" data-target="#myModal"><i class="fa fa-film"></i> Ver Trailer</button>
                 </div>
             </div>
-            <div class="col-4 mt-5 card-group">
-                <div class="col-12">
-                    <b class="h5 text-light">Peliculas Recomendadas</b>
-                </div>
-                <div class="col-4 recommendations" *ngFor="let film of films">
-                    <div class="card">
-                        <img class="img-card img-thumbnail img-pel rounded mx-auto d-block" [src]="film.img">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 mt-4">
-                La próxima entrega de la franquicia y la conclusión de la secuela de la trilogía "Star Wars", así como la "Saga Skywalker"..Un año después de los eventos de "Los últimos Jedi", los restos de la Resistencia se enfrentarán una vez más a la Primera Orden, involucrando conflictos del pasado y del presente. Mientras tanto, el antiguo conflicto entre los Jedi y los Sith llegará a su clímax, lo que llevará a la saga de los Skywalker a un final definitivo. Final de la trilogía iniciada con "El despertar de la Fuerza"....Star Wars: El ascenso de Skywalker
+            <div class="col-5 mt-5 card-group">
+                <div class="col-md-12 mt-4">
+                    La próxima entrega de la franquicia y la conclusión de la secuela de la trilogía "Star Wars", así como la "Saga Skywalker"..Un año después de los eventos de "Los últimos Jedi", los restos de la Resistencia se enfrentarán una vez más a la Primera Orden, involucrando conflictos del pasado y del presente. Mientras tanto, el antiguo conflicto entre los Jedi y los Sith llegará a su clímax, lo que llevará a la saga de los Skywalker a un final definitivo. Final de la trilogía iniciada con "El despertar de la Fuerza"....Star Wars: El ascenso de Skywalker
+                </div>    
             </div>
         </div>
         <div class="row justify-content-center mt-5">
@@ -45,23 +132,54 @@
                 </video>
             </div>
         </div>
-        <div class="row mt-5">
-            <div class="col-10 mt-5">
-                <p><b class="h3">Comentarios</b></p>
-                <form action="">
-                    <div class="card col-9">
-                        <div class="card-body">
-                            Comentarios...
-                        </div>
+
+        <div class="row mt-5 justify-content-center">
+            <div class="col-10">
+                <form action=""> 
+                    <div class="comment-user">
+                        <b class="h3 mt-4">Comentarios</b>
+                        <figure>
+                            <img src="https://cuevana3.io/wp-content/themes/cuevana3/public/img/cnt/user.svg">
+                            <figcaption>
+                                Usuario
+                            </figcaption>
+                        </figure>
                     </div>
-                    <div class="form-row mt-3">
-                        <input class="form-control col-9 mr-2" type="text" name="" placeholder="Añadir comentario..">
-                        <button class="btn btn-primary col-2" type="submit">Enviar</button>
+                    <textarea class="form-control" id="text-comment" cols="30" rows="10" placeholder="Agregar comentario.."></textarea>
+                    <div class="comment-bot">
+                        <button id="btn-send-comment" class="btn btn-primary" type="submit">Publicar</button>
                     </div>
                 </form>
-                
             </div>
         </div>
+
+        <b class="h5 text-light">Peliculas Recomendadas</b>
+        <div class="row">
+            <div class="col-md-9 mt-4">
+                <div class="row">
+                    <div class="col-md-3 recommendations mt-5" *ngFor="let film of films">
+                        <img class="img-card img-thumbnail mx-auto d-block" [src]="film.img">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>        
+                            <!-- 16:9 aspect ratio -->
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/m4U36v9kX2Y" id="video"  allowscriptaccess="always" allow="autoplay"></iframe> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
     </div>
 </div>
 
